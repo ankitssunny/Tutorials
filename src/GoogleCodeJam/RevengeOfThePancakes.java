@@ -1,17 +1,21 @@
 package GoogleCodeJam;
-//Question: https://code.google.com/codejam/contest/6254486/dashboard#s=p0
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.List;
 
-public class CountingSheep {
+//Question: https://code.google.com/codejam/contest/6254486/dashboard#s=p1
 
+public class RevengeOfThePancakes {
 	private Integer index;
+	HashMap<Character, List<Integer>> T9Map= new HashMap<Character, List<Integer>>();
 	BufferedReader reader= new BufferedReader(new InputStreamReader(System.in));
-	static int count=1;	
-
+	static int count=1;
+	
+	
+	
 	public void testcases() throws NumberFormatException, IOException{
 		index= Integer.parseInt(reader.readLine());
 		while(index != 0){
@@ -22,36 +26,23 @@ public class CountingSheep {
 
 	public void testcase() throws IOException{
 	
-		Integer line= Integer.parseInt(reader.readLine());
-		Integer i= 1;
-		Integer temp= null, last;
-		HashSet<Integer> digits= new HashSet<Integer>();
-
-		
-		//line : 1 -> 10
-		//line : 0 -> INSOMNIA
-		if(line == 0)
-			System.out.println("Case #" +count+ ": INSOMNIA");
-		else{
-			do{
-				temp= line * i;	
-				last= temp;
-				i++;
-				while(temp > 0){
-					Integer digit= temp %10;
-					digits.add(digit);
-					temp/=10;
-				}
-			} while(digits.size() != 10);		
-			System.out.println("Case #" +count+ ": " +last);
+		StringBuilder line= new StringBuilder(reader.readLine());
+		Integer flips= 0;
+		//line -> --+-+ --> +++++
+		for(int i=0; i<line.length(); i++){
+			
+			
 		}
+		
+		
+	
+		System.out.println("Case #" +count+ ": " +flips);
 		count++;
 	}
 		
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		// TODO Auto-generated method stub
-		
-		CountingSheep tests= new CountingSheep();
+		RevengeOfThePancakes tests= new RevengeOfThePancakes();
 		Long start= System.currentTimeMillis();
 		tests.testcases();	
 		Long end=  System.currentTimeMillis();
