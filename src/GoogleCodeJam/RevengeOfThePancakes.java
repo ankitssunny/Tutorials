@@ -15,7 +15,6 @@ public class RevengeOfThePancakes {
 	static int count=1;
 	
 	
-	
 	public void testcases() throws NumberFormatException, IOException{
 		index= Integer.parseInt(reader.readLine());
 		while(index != 0){
@@ -28,15 +27,33 @@ public class RevengeOfThePancakes {
 	
 		StringBuilder line= new StringBuilder(reader.readLine());
 		Integer flips= 0;
-		//line -> --+-+ --> +++++
-		for(int i=0; i<line.length(); i++){
+		//line -> --+-+ --> +++++ --> 3 i.e. least number of flips requires to make all plus or happy
+		Character first= line.charAt(0);
+		if(line.length() == 1){
+			if(first == '+')
+				System.out.println("Case #" +count+ ": 0" );
+			else
+				System.out.println("Case #" +count+ ": 1" );
+		}else{
+			while(line.length() > 1){
+				if(first == line.charAt(1)){
+					line= new StringBuilder(line.substring(1, line.length()));
+					first= line.charAt(0);
+					//System.out.println("Flips inside if:+ "+ flips);
+				}else{
+					flips++;
+					// --+- -> ++-
+					//System.out.println("Flips inside else:+ "+ flips);
+					line= new StringBuilder(line.charAt(1) + line.substring(1, line.length()));
+					first= line.charAt(0);
+				}
+				//System.out.println(line.toString());
+			}
 			
-			
-		}
-		
-		
-	
-		System.out.println("Case #" +count+ ": " +flips);
+			if(line.charAt(0) == '-')
+				flips++;
+			System.out.println("Case #" +count+ ": " +flips);
+			}
 		count++;
 	}
 		
