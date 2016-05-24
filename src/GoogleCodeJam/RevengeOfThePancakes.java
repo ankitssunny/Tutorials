@@ -29,31 +29,25 @@ public class RevengeOfThePancakes {
 		Integer flips= 0;
 		//line -> --+-+ --> +++++ --> 3 i.e. least number of flips requires to make all plus or happy
 		Character first= line.charAt(0);
-		if(line.length() == 1){
-			if(first == '+')
-				System.out.println("Case #" +count+ ": 0" );
-			else
-				System.out.println("Case #" +count+ ": 1" );
-		}else{
-			while(line.length() > 1){
-				if(first == line.charAt(1)){
-					line= new StringBuilder(line.substring(1, line.length()));
-					first= line.charAt(0);
-					//System.out.println("Flips inside if:+ "+ flips);
-				}else{
-					flips++;
-					// --+- -> ++-
-					//System.out.println("Flips inside else:+ "+ flips);
-					line= new StringBuilder(line.charAt(1) + line.substring(1, line.length()));
-					first= line.charAt(0);
-				}
-				//System.out.println(line.toString());
-			}
-			
-			if(line.charAt(0) == '-')
+		while(line.length() > 1){
+			if(first == line.charAt(1)){
+				line= new StringBuilder(line.substring(1, line.length()));
+				first= line.charAt(0);
+				//System.out.println("Flips inside if:+ "+ flips);
+			}else{
 				flips++;
-			System.out.println("Case #" +count+ ": " +flips);
+				// --+- -> ++-
+				//System.out.println("Flips inside else:+ "+ flips);
+				line= new StringBuilder(line.charAt(1) + line.substring(1, line.length()));
+				first= line.charAt(0);
 			}
+			//System.out.println(line.toString());
+		}
+
+		if(line.charAt(0) == '-')
+			flips++;
+		System.out.println("Case #" +count+ ": " +flips);
+
 		count++;
 	}
 		
