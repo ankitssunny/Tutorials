@@ -3,8 +3,10 @@ package GoogleCodeJam;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashSet;
+
 //Question: https://code.google.com/codejam/contest/6254486/dashboard#s=p2
-import java.util.List;
 
 public class CoinJam {
 
@@ -13,7 +15,9 @@ public class CoinJam {
 	static int count=1;	
 	private StringBuilder curr;
 	private StringBuilder max;
-	private List<Integer> interpretations, nonTrivialDivisors;
+	private ArrayList<Long> interpretations= new ArrayList<Long>();
+	private ArrayList<Integer> nonTrivialDivisors= new ArrayList<Integer>();
+	private HashSet<String> coinJam= new HashSet<String>();
 	
 	
 	public void testcases() throws NumberFormatException, IOException{
@@ -26,7 +30,6 @@ public class CoinJam {
 
 	
 	public void testcase() throws IOException{
-		System.out.println("Case #" +count+ ":");
 		String line= reader.readLine();
 		// 6 3 => 100011 5 13 147 31 43 1121 73 77 629
 		String[] nums= line.split(" ");
@@ -38,32 +41,53 @@ public class CoinJam {
 			curr.append("0");
 			max.append("1");
 		}
-		
+		coinJam.add(curr.toString());
+		Long maxToInt= (long) Integer.parseInt(max.toString(), 2);
+		System.out.println("Case #" +count+ ":");
 		while(j != 0){
-			
 			if(startsAndEndsWithOne() &&  findInterpretations()){
-				/// Print the jamcoin 
 				findNonTrivialDivisors();
+				String nonTrivialDivisorString="";
 				for(int i=0; i< nonTrivialDivisors.size(); i++)
-					System.out.print(nonTrivialDivisors.get(0) + " ");
+					nonTrivialDivisorString += nonTrivialDivisors.get(i).toString() + " ";
+				System.out.println(curr.toString()+ " " +nonTrivialDivisorString);
 				j--;	
 			}	
 			
-			// Find interpretations of next number
-			interpretations= null;
-			nonTrivialDivisors= null;
-			// have to figure out a way to increment curr and check if it is less than max.
-		}		
+			interpretations= new ArrayList<Long>();
+			nonTrivialDivisors= new ArrayList<Integer>();
+			Long currToInt=(long) (Integer.parseInt(curr.toString(), 2) + 1);
+			curr= toBinary(currToInt);
+			while (currToInt < maxToInt && coinJam.contains(curr)){
+				currToInt=(long) (Integer.parseInt(curr.toString(), 2) + 1);
+				curr= toBinary(currToInt);
+				System.out.println("Inside while");
+			}
+			coinJam.add(curr.toString());
+		}
 		count++;
+	}
+	
+	
+	public StringBuilder toBinary(Long currToInt){
+		StringBuilder newcurr= new StringBuilder();
+		Long i;
+		while(currToInt > 0){
+			i= currToInt % 2;
+			newcurr.append(i.toString());
+			currToInt /= 2; 
+		}
+		newcurr.reverse();
+		return newcurr;
 	}
 	
 	
 	public void findNonTrivialDivisors(){
 	
 		for(int i=0; i<interpretations.size(); i++){
-			int num= interpretations.get(i);
-			for(int j=1 ; j <= num/2 ; j++){
-				if(j % num == 0){
+			Long num= interpretations.get(i);
+			for(int j=2 ; j <= num/2 ; j++){
+				if(num % j == 0){
 					nonTrivialDivisors.add(j);
 					break;
 				}
@@ -76,7 +100,9 @@ public class CoinJam {
 		int baseStart= 2;
 		int baseEnd= 10;
 		while(baseStart <= baseEnd){
-			int number=Integer.parseInt(curr.toString(), baseStart); 
+			System.out.println(curr.toString());
+			Long number=(long) Integer.parseInt(curr.toString(), baseStart); 
+			System.out.println(number);
 			if(prime(number))
 				return false;
 			else{
@@ -89,17 +115,16 @@ public class CoinJam {
 
 	
 	public boolean startsAndEndsWithOne(){
-		// first check that the string ends and starts with 1
-		if(curr.charAt(0) == '1' && curr.charAt(curr.length()-1) == 1)
+		if(curr.charAt(0) == '1' && curr.charAt(curr.length()-1) == '1')
 			return true;		
-		else return false;	
+		else	return false;	
 	}
 	
 	
-	public boolean prime(Integer num){
+	public boolean prime(Long number){
 		int c=0;
-		for (int i= 1; i<= num; i++){
-			if( num % i == 0 )
+		for (int i= 1; i<= number; i++){
+			if( number % i == 0 )
 				c++;
 		}
 		if( c > 2) return false;
