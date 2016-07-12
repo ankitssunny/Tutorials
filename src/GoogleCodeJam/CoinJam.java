@@ -1,144 +1,81 @@
 package GoogleCodeJam;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashSet;
-
-//Question: https://code.google.com/codejam/contest/6254486/dashboard#s=p2
+import java.io.*;
+import java.util.*;
+import java.math.BigInteger;
 
 public class CoinJam {
+  private static InputReader in;
+  private static PrintWriter out;
+  public static boolean SUBMIT = false;
+  public static final String NAME = "C-small-attempt0";
+  
+  private static void main2() throws IOException {
+    int n = in.nextInt(), j = in.nextInt();
+    char[] s1 = new char[n];
+    Arrays.fill(s1, '0');
+    s1[n-1] = '1';
+    s1[n/2-1] = '1';
+    BigInteger[] mult = new BigInteger[11];
+    for (int i = 2; i <= 10; i++) {
+      mult[i] = new BigInteger(new String(s1), i);
+    }
+    char[] s2 = new char[n];
+    Arrays.fill(s2, '0');
+    s2[n/2] = '1';
+    BigInteger a1 = mult[2];
+    int count = 0;
+    for (int i = 1; count < j;i  += 2) {
+      BigInteger add = new BigInteger(new String(s2), 2);
+      add = add.add(new BigInteger(""+i));
+      BigInteger result = add.multiply(a1);
+      out.print(result.toString(2));
+      for (int k = 2; k <= 10; k++) out.print(" "+mult[k]);
+      count++;
+      out.println();
+    }
+  }
 
-	private Integer index;
-	BufferedReader reader= new BufferedReader(new InputStreamReader(System.in));
-	static int count=1;	
-	private StringBuilder curr;
-	private StringBuilder max;
-	private ArrayList<Long> interpretations= new ArrayList<Long>();
-	private ArrayList<Integer> nonTrivialDivisors= new ArrayList<Integer>();
-	private HashSet<String> coinJam= new HashSet<String>();
-	
-	
-	public void testcases() throws NumberFormatException, IOException{
-		index= Integer.parseInt(reader.readLine());
-		while(index != 0){
-			testcase();
-			index--;
-		}
-	}
+  public static void main(String[] args) throws IOException {
+    if (SUBMIT) {
+      in = new InputReader(new FileInputStream(new File("small")));
+      out = new PrintWriter(new BufferedWriter(new FileWriter(NAME + ".out")));
+    } else {
+      in = new InputReader(System.in);
+      out = new PrintWriter(System.out, true);
+    }
 
-	
-	public void testcase() throws IOException{
-		String line= reader.readLine();
-		// 6 3 => 100011 5 13 147 31 43 1121 73 77 629
-		String[] nums= line.split(" ");
- 		int n= Integer.parseInt(nums[0]);
-		int j= Integer.parseInt(nums[1]);
-		curr= new StringBuilder("1"); 
-		max= new StringBuilder("1");
-		for(int i=1; i<n; i++){
-			curr.append("0");
-			max.append("1");
-		}
-		coinJam.add(curr.toString());
-		Long maxToInt= (long) Integer.parseInt(max.toString(), 2);
-		System.out.println("Case #" +count+ ":");
-		while(j != 0){
-			if(startsAndEndsWithOne() &&  findInterpretations()){
-				findNonTrivialDivisors();
-				String nonTrivialDivisorString="";
-				for(int i=0; i< nonTrivialDivisors.size(); i++)
-					nonTrivialDivisorString += nonTrivialDivisors.get(i).toString() + " ";
-				System.out.println(curr.toString()+ " " +nonTrivialDivisorString);
-				j--;	
-			}	
-			
-			interpretations= new ArrayList<Long>();
-			nonTrivialDivisors= new ArrayList<Integer>();
-			Long currToInt=(long) (Integer.parseInt(curr.toString(), 2) + 1);
-			curr= toBinary(currToInt);
-			while (currToInt < maxToInt && coinJam.contains(curr)){
-				currToInt=(long) (Integer.parseInt(curr.toString(), 2) + 1);
-				curr= toBinary(currToInt);
-				System.out.println("Inside while");
-			}
-			coinJam.add(curr.toString());
-		}
-		count++;
-	}
-	
-	
-	public StringBuilder toBinary(Long currToInt){
-		StringBuilder newcurr= new StringBuilder();
-		Long i;
-		while(currToInt > 0){
-			i= currToInt % 2;
-			newcurr.append(i.toString());
-			currToInt /= 2; 
-		}
-		newcurr.reverse();
-		return newcurr;
-	}
-	
-	
-	public void findNonTrivialDivisors(){
-	
-		for(int i=0; i<interpretations.size(); i++){
-			Long num= interpretations.get(i);
-			for(int j=2 ; j <= num/2 ; j++){
-				if(num % j == 0){
-					nonTrivialDivisors.add(j);
-					break;
-				}
-			}
-		}
-	}
-	
-	
-	public boolean findInterpretations(){
-		int baseStart= 2;
-		int baseEnd= 10;
-		while(baseStart <= baseEnd){
-			System.out.println(curr.toString());
-			Long number=(long) Integer.parseInt(curr.toString(), baseStart); 
-			System.out.println(number);
-			if(prime(number))
-				return false;
-			else{
-				interpretations.add(number);
-				baseStart++;
-			}
-		}
-		return true;
-	}
+    int numCases = in.nextInt();
+    for (int test = 1; test <= numCases; test++) {
+      out.println("Case #" + test + ":");
+      main2();
+    }
 
-	
-	public boolean startsAndEndsWithOne(){
-		if(curr.charAt(0) == '1' && curr.charAt(curr.length()-1) == '1')
-			return true;		
-		else	return false;	
-	}
-	
-	
-	public boolean prime(Long number){
-		int c=0;
-		for (int i= 1; i<= number; i++){
-			if( number % i == 0 )
-				c++;
-		}
-		if( c > 2) return false;
-		else return true;
-	}
-	
-	
-	public static void main(String[] args) throws NumberFormatException, IOException {
-		// TODO Auto-generated method stub
-		
-		CoinJam tests= new CoinJam();
-		Long start= System.currentTimeMillis();
-		tests.testcases();	
-		Long end=  System.currentTimeMillis();
-		System.out.println(end-start);
-	}
+    out.close();
+    System.exit(0);
+  }
+
+  static class InputReader {
+    public BufferedReader reader;
+    public StringTokenizer tokenizer;
+
+    public InputReader(InputStream stream) {
+      reader = new BufferedReader(new InputStreamReader(stream), 32768);
+      tokenizer = null;
+    }
+
+    public String next() {
+      while (tokenizer == null || !tokenizer.hasMoreTokens()) {
+        try {
+          tokenizer = new StringTokenizer(reader.readLine());
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+      }
+      return tokenizer.nextToken();
+    }
+
+    public int nextInt() {
+      return Integer.parseInt(next());
+    }
+  }
 }
