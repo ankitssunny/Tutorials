@@ -11,6 +11,7 @@ public class lengthOfLastWord {
 		StringBuilder str = new StringBuilder(s);
 		str.reverse();
 		
+		
 		if(str.charAt(0) == ' ')
 			return 0;
 

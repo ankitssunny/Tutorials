@@ -27,6 +27,7 @@ public class reverseVowels {
 				vowels.add(chars[i]);
 				break;
 			}
+			
 		}
 
 		int k= vowels.size() -1;
